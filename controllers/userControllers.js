@@ -60,22 +60,8 @@ export const userLoginSuccess = async (req, res) => {
 export const getAllHires = async (req, res) => {
   try {
     const hires = await User.find({ role: "hire" });
-    const hiresWithTaskCount = await Promise.all(
-      hires.map(async (hire) => {
-        const taskCount = await Task.countDocuments({ assignedTo: hire._id });
-        const completedTaskCount = await Task.countDocuments({
-          assignedTo: hire._id,
-          status: "completed",
-        });
-        return {
-          ...hire.toObject(),
-          taskCount,
-          completedTaskCount,
-        };
-      })
-    );
 
-    return res.status(200).json(hiresWithTaskCount);
+    return res.status(200).json(hires);
   } catch (error) {
     return res.status(500).json({ message: "Server error" });
   }
@@ -120,7 +106,7 @@ export const getAllTasks = async (req, res) => {
     res.status(200).json(user.tasks);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "" });
   }
 };
 
